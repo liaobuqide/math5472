@@ -1,5 +1,5 @@
 
-The author of the paper provides the source codes for the paper, so I just copied the github project from this website https://github.com/stephenslab/ash. Just like what the aythor said, the success try of this project needs a lot of packages to support, which will consumes a lot of time to debug. Thus, apart from the original files, I uploaded the calculation result files: dsc_opt.RData res.RData and res.znull.RData. Thus, even the calclution could not be conducted, the analysis and the plot code could be finished. 
+The author of the paper provides the source codes for the paper, so I just copied the github project from this website https://github.com/stephenslab/ash. Just like what the author said, the success try of this project needs a lot of packages to support, which will consumes a lot of time to debug. Thus, apart from the original files, I uploaded the calculation result files: dsc_opt.RData res.RData and res.znull.RData. Thus, even the calclution could not be conducted, the analysis and the plot code could be finished. 
 
 The following information is provided by the author:
 
