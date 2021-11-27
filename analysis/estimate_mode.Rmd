@@ -1,0 +1,86 @@
+---
+title: "Estimate Non-zero mode"
+author: "Matthew Stephens"
+date: 2016-02-01
+---
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r system("git log -1 --format='%H'", intern = TRUE)`
+
+The purpose of this analysis is to check the performance of the non-zero mode
+option.
+
+First, we load the necessary libraries.
+
+```{r packages}
+library(ashr)
+```
+
+```{r chunk_options, include=FALSE}
+# Specify settings for displaying the plots in the rendered document.
+source("chunk-options.R")
+```
+
+## Simple simulation
+
+I conjecture that the mean of the posterior means should be close to the
+optimum for the mode... maybe even equal to it. (That is, this would constitute
+a fixed point for the update. We aren't explicitly using that directly in the
+current implementation; the uniform mixture uses `optim` to do it numerically;
+the normal mixture uses a true EM I think...)
+
+```{r evaluate_mode_estimates}
+check_mode = function(betahat, sebetahat, mixcompdist) {
+  z.ash = ash(betahat,sebetahat,mixcompdist = mixcompdist,mode = "estimate")
+  average.posteriormean = mean(get_pm(z.ash))
+  fitted.mode           = comp_mean(get_fitted_g(z.ash))[1]
+
+  # Refit to get g.
+  z.ash1 = ash(betahat - fitted.mode,sebetahat,mixcompdist = mixcompdist)
+  g      = get_fitted_g(z.ash1)
+  loglik = get_loglik(z.ash1)
+
+  loglik.down          = ash(z - fitted.mode - 0.01,1,g = g)$loglik
+  loglik.up            = ash(z - fitted.mode + 0.01,1,g = g)$loglik
+  loglik.posteriormean = ash(z - average.posteriormean,1,g = g)$loglik
+
+  return(list(fitted.mode = fitted.mode,
+              average.posteriormean = average.posteriormean,
+              loglik = c(loglik,loglik.down,loglik.up,loglik.posteriormean)))
+}
+
+set.seed(100)
+z = rnorm(1000) + 3
+print(check_mode(z,1,mixcompdist = "uniform"))
+print(check_mode(z,1,mixcompdist = "normal"))
+print(check_mode(z,1,mixcompdist = "halfuniform"))
+```
+
+An additional experiment:
+
+```{r}
+set.seed(100)
+beta     = rexp(1000)
+betahat  = beta + rnorm(1000,0,0.1)
+z.ash.hu = ash(betahat,0.1,mixcompdist="halfuniform",outputlevel=4,method="shrink")
+z.ash.pu = ash(betahat,0.1,mixcompdist="+uniform",outputlevel=4,method="shrink")
+
+z.ash.hu2    = ash(betahat - 0.2,0.1,mixcompdist = "halfuniform",outputlevel = 4,
+                   method = "shrink")
+z.ash.pu2    = ash(betahat - 0.1,0.1,mixcompdist = "+uniform",outputlevel = 4,
+                   method = "shrink")
+z.ash.hu.nzm = ash(betahat,0.1,mixcompdist = "halfuniform",mode = "estimate",
+                   method = "shrink")
+print(z.ash.hu$loglik,digits = 8)
+print(z.ash.hu.nzm$loglik,digits = 8)
+```
+
+*Note to self:* check that the normal version works too; check
+nonzeromodeEMobj as it doesn't seem needed.
+
+## Session information
+
+```{r info}
+sessionInfo()
+```

@@ -1,0 +1,59 @@
+---
+title: "Plot densities for simulation studies"
+author: "Matthew Stephens"
+date: 2015-10-26
+---
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r system("git log -1 --format='%H'", intern = TRUE)`
+
+First, we load the necessary libraries.
+
+```{r packages}
+library(ashr)
+library(ggplot2)
+library(dplyr)
+```
+
+```{r chunk_options, include=FALSE}
+# Specify settings for displaying the plots in the rendered document.
+source("chunk-options.R")
+```
+
+Load the results of the simulation experiments, and generate the density
+data for all the simulation scenarios in a single data frame ("df").
+
+```{r retrieve_sim_results}
+load("../output/dsc-shrink-files/res.RData")
+PLOTSCENARIOS = c("spiky","near-normal","flat-top","skew","bimodal")
+PLOTNAMES     = PLOTSCENARIOS
+
+df = data.frame()
+for(i in PLOTSCENARIOS) {
+  s  = dsc_shrink$scenarios[[i]]
+  g  = s$args$g
+  x  = seq(-6,6,length = 100)
+  y  = as.numeric(dens(g,x))
+  df = rbind(df,data.frame(x = x,y = y,scenario = i))
+}
+
+df$scenario         = factor(df$scenario,levels = PLOTSCENARIOS)
+levels(df$scenario) = PLOTNAMES
+```
+
+Generate density plots using ggplot.
+
+```{r scenario_density, dev='pdf',fig.height=3, fig.width=9, crop=TRUE}
+ggplot(df,aes(x = x,y = y)) + 
+  geom_line(size = 1.2,linetype = 1) + 
+  facet_grid(.~scenario) + 
+  ylab("density")
+```
+
+## Session information
+
+```{r info}
+sessionInfo()
+```
+

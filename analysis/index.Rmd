@@ -1,0 +1,45 @@
+---
+title: "Home"
+---
+
+**Last updated:** `r Sys.Date()`
+
+**Code version:** `r system("git log -1 --format='%H'", intern = TRUE)`
+
+
+## Simple illustrations
+
+*  [Figures illustrating FDR](makefig_FDReg.html)
+*  [Illustatrate dilution effect of low-precision observations](make_GOODPOOR_figs.html)
+*  [Adaptive Shrinkage](adaptive_shrinkage.html)
+*  [Adaptive Shrinkage: shrunken interval estimates](metaplot_examples.html)
+
+*  [Comparing models: EE vs ET models](CompareEEvsETmodel.html)
+*  [Checking how qvalue behaves in simulation suggested by referee](referee_uaza.html)
+*  [Comparison of methods, and example of Credible Interval behaviour when UA does not hold](efron.fcr.html)
+*  [Using ash to fit the NPMLE; comparison with REBayes](ash_npmle.html)
+
+## DSC Shrink (the main simulation study in the paper)
+
+*  [Plot Densities of simulations](plot_egdens.html)
+*  [Plot estimates of pi0](plot_pi0est.html)
+*  [Plot local false sign rates and lfdr vs truth](plot_lfsr.html)
+*  [Plot CDFs](plot_cdf_eg.html)
+
+
+*  [Investigate coverage of hu method without penalty](investigate_hu_badcoverage.html)
+*  [Run mixfdr on low noise bimodal situation](check_mixfdr_lownoise.html)
+*  [Make coverage tables](summarize_coverage.html)
+
+
+## Optimization method: EM vs Interior Point
+*  [Compare loglik achieved by EM vs Interior Point](checkIP.html)
+*  [Compare speed of EM vs Interior Point](IPvsEM.html)
+
+## DSC Znull (assess behaviour of ash LR under null)
+
+* [Summarize results of null simulations](summarize_dsc_znull.html)
+
+## Check how estimating the mode performs
+
+* [Basic check of non-zero model option](estimate_mode.html)
